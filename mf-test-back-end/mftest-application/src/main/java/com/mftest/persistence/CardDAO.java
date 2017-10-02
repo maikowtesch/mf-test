@@ -1,6 +1,5 @@
 package com.mftest.persistence;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityExistsException;
@@ -15,8 +14,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import com.mftest.core.exception.PersistenceCoreException;
 import com.mftest.core.persistence.CardPersistenceInterface;
 import com.mftest.core.persistence.entity.Card;
-import com.mftest.core.persistence.entity.Role;
-import com.mftest.core.persistence.entity.User;
 
 public class CardDAO implements CardPersistenceInterface {
 
@@ -88,7 +85,7 @@ public class CardDAO implements CardPersistenceInterface {
 	 */
 	@Override
 	public List<Card> search(String searchString) throws PersistenceCoreException {
-		return new ArrayList<>();
+		return search(searchString, -1);
 	}
 
 	/**
@@ -98,11 +95,14 @@ public class CardDAO implements CardPersistenceInterface {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Card> search(String searchString, long userId) throws PersistenceCoreException {
-		String hql = "select c from Card c where c.cardNumber like \\%:searchString\\% and c.user.id = :userId";
+		String hql = "select c from Card c where c.cardNumber like concat('%',:searchString,'%')";
+		hql += (userId > 0) ? " and c.user.id = :userId" : "";
 		
 		Query query = em.createQuery(hql);
 		query.setParameter("searchString", searchString);
-		query.setParameter("userId", userId);
+		if (userId > 0) {
+			query.setParameter("userId", userId);
+		}
 		
 		try {
 			return (List<Card>) query.getResultList();
