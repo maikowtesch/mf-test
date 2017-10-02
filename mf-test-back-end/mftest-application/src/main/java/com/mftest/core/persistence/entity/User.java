@@ -1,14 +1,47 @@
 package com.mftest.core.persistence.entity;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 /**
  * Entity that represents a User.
  */
+@Entity
+@Table(name="user")
 public class User {
 	
+	@Id
+	@Column(name="user_id")
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
+	
+	@Column(name="name")
 	private String name;
+	
+	@Column(name="password")
 	private String password;
+	
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name="role_id", nullable=false)
 	private Role role;
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	private List<Card> cards;
+	
+	public User() {
+		super();
+	}
 	
 	public User(String name, String password, Role role) {
 		this.name = name;
@@ -46,5 +79,13 @@ public class User {
 
 	public void setRole(Role role) {
 		this.role = role;
+	}
+
+	public List<Card> getCards() {
+		return cards;
+	}
+
+	public void setCards(List<Card> cards) {
+		this.cards = cards;
 	}
 }

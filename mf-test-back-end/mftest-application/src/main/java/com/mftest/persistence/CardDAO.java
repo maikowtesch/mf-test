@@ -3,6 +3,15 @@ package com.mftest.persistence;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityExistsException;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceException;
+import javax.persistence.Query;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+
 import com.mftest.core.exception.PersistenceCoreException;
 import com.mftest.core.persistence.CardPersistenceInterface;
 import com.mftest.core.persistence.entity.Card;
@@ -11,12 +20,28 @@ import com.mftest.core.persistence.entity.User;
 
 public class CardDAO implements CardPersistenceInterface {
 
+	@Autowired
+	@Qualifier("myPersistence")
+	EntityManager em;
+	
 	/**
 	 * Save a card.
 	 */
 	@Override
 	public long save(Card card) throws PersistenceCoreException {
-		return 0;
+		try {
+			em.getTransaction().begin();
+			em.persist(card);
+			em.getTransaction().commit();
+		} catch(EntityExistsException | IllegalArgumentException | IllegalStateException e) {
+			if (em.getTransaction().isActive()) {
+				em.getTransaction().rollback();
+			}
+			
+			throw new PersistenceCoreException(e.getMessage());
+		}
+		
+		return card.getId();
 	}
 
 	/**
@@ -24,7 +49,17 @@ public class CardDAO implements CardPersistenceInterface {
 	 */
 	@Override
 	public void update(Card card) throws PersistenceCoreException {
-		
+		try {
+			em.getTransaction().begin();
+			em.merge(card);
+			em.getTransaction().commit();
+		} catch(EntityExistsException | IllegalArgumentException | IllegalStateException e) {
+			if (em.getTransaction().isActive()) {
+				em.getTransaction().rollback();
+			}
+			
+			throw new PersistenceCoreException(e.getMessage());
+		}
 	}
 
 	/**
@@ -32,7 +67,19 @@ public class CardDAO implements CardPersistenceInterface {
 	 */
 	@Override
 	public Card findByCardData(String number, long userId) throws PersistenceCoreException {
-		return null;
+		String hql = "select c from Card c where c.cardNumber = :number and c.user.id = :userId";
+		
+		Query query = em.createQuery(hql);
+		query.setParameter("number", number);
+		query.setParameter("userId", userId);
+		
+		try {
+			return (Card) query.getSingleResult();
+		} catch (NoResultException e) {
+			return null;
+		} catch (PersistenceException e) {
+			throw new PersistenceCoreException(e.getMessage());
+		}
 	}
 
 	/**
@@ -48,14 +95,20 @@ public class CardDAO implements CardPersistenceInterface {
 	 * Find cards by a search string representing a card number (or part of it).<br>
 	 * Return only the cards that belong to the specified user.
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Card> search(String searchString, long userId) throws PersistenceCoreException {
-		List<Card> cards = new ArrayList<>();
-		cards.add(new Card("2222333344445555", "Fulano", "22/12", new User("admin", "admin", new Role(1, "Admin"))));
-		cards.add(new Card("3333444455556666", "Ciclano", "22/12", new User("admin", "admin", new Role(1, "Admin"))));
-		cards.add(new Card("4444555566667777", "Beltrano", "22/12", new User("admin", "admin", new Role(1, "Admin"))));
+		String hql = "select c from Card c where c.cardNumber like \\%:searchString\\% and c.user.id = :userId";
 		
-		return cards;
+		Query query = em.createQuery(hql);
+		query.setParameter("searchString", searchString);
+		query.setParameter("userId", userId);
+		
+		try {
+			return (List<Card>) query.getResultList();
+		} catch (PersistenceException e) {
+			throw new PersistenceCoreException(e.getMessage());
+		}
 	}
 
 }

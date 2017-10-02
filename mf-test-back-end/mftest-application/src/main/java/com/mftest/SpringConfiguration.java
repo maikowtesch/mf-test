@@ -1,5 +1,9 @@
 package com.mftest;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -40,5 +44,12 @@ public class SpringConfiguration {
 	public UserPersistenceInterface userPersistence() {
 		return new UserDAO();
 	}
-
+	
+	// Spring Boot, together with Spring Data, create the entityManagerFactory bean automatically.
+	@Bean
+	@Qualifier("myPersistence")
+	public EntityManager entityManager(EntityManagerFactory factory) {
+		return factory.createEntityManager();
+	}
+	
 }

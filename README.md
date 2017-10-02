@@ -37,7 +37,7 @@ com.mftest.services.CardService
 ```
 The core classes *LoginBusiness* and *CardBusiness* are injected in the service classes by the Spring container.
 
-Each method in *CardService* perform a token authentication.
+Each method in *CardService* perform a token authentication using JWT.
 
 ### Persistence
 Persistence is performed by the classes:
@@ -46,9 +46,9 @@ com.mftest.persistence.UserDAO
 com.mftest.persistence.CardDAO
 ```
 
-They implement the core intefaces *UserPersistenceInterface* and *CardPersistenceInterface*.
-
 The Spring container injects these two classes into the core, as a concrete persistence implementation.
+
+They implement the core interfaces *UserPersistenceInterface* and *CardPersistenceInterface*.
 
 ## Test Instructions
 
