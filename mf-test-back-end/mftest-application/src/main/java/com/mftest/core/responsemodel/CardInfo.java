@@ -1,4 +1,4 @@
-package com.mftest.core.dto;
+package com.mftest.core.responsemodel;
 
 /**
  * Class that exposes the Credit Card data shared with the clients.  

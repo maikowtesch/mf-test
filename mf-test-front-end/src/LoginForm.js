@@ -59,8 +59,12 @@ class LoginForm extends Component {
 
 	onClickLoginButtonCallback(token) {
 		// Login inválido
+
 		if (token.token === '') {
+			console.log(token);
 			this.throwMessage('Invalid user name or password, please try again.', false);
+		} else if (token.token === '1') {
+			this.throwMessage('Internal error.', false);
 		} else {
 			this.props.onLogin(token);
 		}
@@ -80,9 +84,9 @@ class LoginForm extends Component {
 			.catch(this.onClickButtonError);
 	}
 
-	onClickCreateLoginButtonCallback(created) {
-		if (created === false) {
-			this.throwMessage('The informed username already exists.', false);
+	onClickCreateLoginButtonCallback(status) {
+		if (status.code === 1) {
+			this.throwMessage(status.message, false);
 		} else {
 			this.throwMessage('Username/Password created succesfully.', true);
 			this.setState({ password:''});

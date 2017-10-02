@@ -1,4 +1,4 @@
-package com.mftest.core.dto;
+package com.mftest.dto;
 
 /**
  * Class that represents the token information exchanged with the clients. 
@@ -16,19 +16,13 @@ public class Token {
 	private String userName;
 	
 	/**
-	 * The code for the user's role in the system.
-	 */
-	private int userRole;
-	
-	/**
 	 * The description for the user's role in the system.
 	 */
 	private String userRoleDesc;
 	
-	public Token(String cryptToken, String userName, int userRole, String userRoleDescription) {
+	public Token(String cryptToken, String userName, String userRoleDescription) {
 		this.token = cryptToken;
 		this.userName = userName;
-		this.userRole = userRole;
 		this.userRoleDesc = userRoleDescription;
 	}
 
@@ -48,14 +42,6 @@ public class Token {
 		this.userName = userName;
 	}
 
-	public int getUserRole() {
-		return userRole;
-	}
-
-	public void setUserRole(int userRole) {
-		this.userRole = userRole;
-	}
-	
 	public String getUserRoleDesc() {
 		return userRoleDesc;
 	}

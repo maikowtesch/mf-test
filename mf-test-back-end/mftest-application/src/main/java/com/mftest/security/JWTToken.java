@@ -22,7 +22,7 @@ public class JWTToken {
 	 * @param userRole Id representing the user role in the system.
 	 * @return The token.
 	 */
-	public static String create(String user, int userId, int userRole) {
+	public static String create(String user, Integer userId, Integer userRole) {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("user", user);
 		claims.put("userId", userId);

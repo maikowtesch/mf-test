@@ -1,6 +1,8 @@
-package com.mftest.core.dto;
+package com.mftest.dto;
 
 import java.util.List;
+
+import com.mftest.core.responsemodel.CardInfo;
 
 /**
  * Class representing Card search results.

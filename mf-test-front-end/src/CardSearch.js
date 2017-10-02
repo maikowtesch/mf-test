@@ -48,8 +48,13 @@ class TaskBoard extends Component {
 	}
 
 	onClickSearchButtonCallback(search) {
-		if (search.status.code === 3) {
+		if (search.status.code !== 1) {
 			this.setState({ cardList:search.cards });
+
+			// possible warnings
+			if (search.status.code === 2) {
+				alert(search.status.message);
+			}
 		} else {
 			alert(search.status.message);
 		}

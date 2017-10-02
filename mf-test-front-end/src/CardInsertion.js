@@ -64,10 +64,13 @@ class ManagedTasks extends Component {
 	}
 
 	onClickInsertButtonCallback(status) {
-		alert(status.message);
+		
 
-		if (status.code !== 91) {
+		if (status.code === 0) {
+			alert('Card inserted successfully.');
 			this.setState({ cardNumber:'', holderName:'', expiryDate:'' });
+		} else {
+			alert(status.message);
 		}
 	}
 

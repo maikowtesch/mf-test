@@ -1,4 +1,4 @@
-package com.mftest.core.dto;
+package com.mftest.dto;
 
 /**
  * Class that represents the request status exchanged with the clients. 
