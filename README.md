@@ -9,7 +9,7 @@ Simple credit card tool for test purposes.
 - **Security**: JSON Web Tokens (JWT). Tokens are exchanged between server and client. The token authentication is performed on each RESTFull call.
 
 ## Design
-This project uses the Robert Martin's concept of **Clean Architecture** ([more info here](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)). The Inversion of Dependency principle is used to decouple the core (where the business rules live) from other layers of the system (presentation, database etc).
+This project uses the concept of **Clean Architecture** ([more info here](https://8thlight.com/blog/uncle-bob/2012/08/13/the-clean-architecture.html)). The Inversion of Dependency principle is used to decouple the core (where the business rules live) from other layers of the system (presentation, database etc).
 
 This approach produces a system that is:
 - Independent of frameworks. The core is writen in pure Java.
